@@ -1,0 +1,4 @@
+---
+# defaults file for roles/prometheus
+prometheus_tar: "prometheus-2.37.5.linux-amd64.tar.gz"
+prometheus_path: "/usr/local/prometheus"

@@ -1,0 +1,36 @@
+---
+# tasks file for roles/prometheus
+- name: create directory
+  file:
+    path: "{{ prometheus_path }}"
+    state: directory
+
+- name: decompress tarball
+  unarchive:
+    src: "{{ prometheus_tar }}"
+    dest: "{{ prometheus_path }}"
+    extra_opts:
+      - '--strip-components=1'
+
+- name: create systemd service
+  blockinfile:
+    path: /usr/lib/systemd/system/prometheus.service
+    block: |
+      [Unit]
+      Description=Prometheus
+      After=network.target
+
+      [Service]
+      ExecStart={{ prometheus_path }}/prometheus \
+        --config.file={{ prometheus_path }}/prometheus.yml \
+        --storage.tsdb.path={{ prometheus_path }}/data/
+
+      [Install]
+      WantedBy=multi-user.target
+    create: true
+
+- name: check service status
+  systemd:
+    name: prometheus.service
+    state: started
+    enabled: true

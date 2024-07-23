@@ -1,0 +1,8 @@
+---
+- name: setup prometheus node
+  hosts: web
+  gather_facts: no
+  become: yes
+  roles:
+    - common
+    - node_exporter

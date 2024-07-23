@@ -1,0 +1,9 @@
+---
+# tasks file for prometheus/roles/grafana
+- yum:
+    name: grafana
+
+- service:
+    name: grafana-server
+    state: started
+    enabled: true

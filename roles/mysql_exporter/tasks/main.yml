@@ -1,0 +1,45 @@
+---
+# tasks file for roles/mysqld_exporter
+- name: create directory
+  file:
+    path: "{{ mysqld_exporter_path }}"
+    state: directory
+
+- name: decompress tarball
+  unarchive:
+    src: "{{ mysqld_exporter_tar }}"
+    dest: "{{ mysqld_exporter_path }}"
+    extra_opts:
+      - '--strip-components=1'
+
+- name: create .my.cnf
+  copy:
+    dest: "{{ mysqld_exporter_path }}/.my.cnf"
+    content: |
+      [client]
+      host={{ mysql_host }}
+      port={{ mysql_port }}
+      user={{ mysql_user }}
+      password={{ mysql_password }}
+
+- name: create systemd service
+  blockinfile:
+    path: /usr/lib/systemd/system/mysqld_exporter.service
+    block: |
+      [Unit]
+      Description=mysqld_exporter
+      After=network.target
+
+      [Service]
+      ExecStart={{ mysqld_exporter_path }}/mysqld_exporter \
+        --config.my-cnf={{ mysqld_exporter_path }}/.my.cnf
+
+      [Install]
+      WantedBy=multi-user.target
+    create: true
+
+- name: check service status
+  systemd:
+    name: mysqld_exporter.service
+    state: started
+    enabled: true

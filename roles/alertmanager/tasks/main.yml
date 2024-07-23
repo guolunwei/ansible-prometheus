@@ -1,0 +1,35 @@
+---
+# tasks file for roles/alertmanager
+- name: create directory
+  file:
+    path: "{{ alertmanager_path }}"
+    state: directory
+
+- name: decompress tarball
+  unarchive:
+    src: "{{ alertmanager_tar }}"
+    dest: "{{ alertmanager_path }}"
+    extra_opts:
+      - '--strip-components=1'
+
+- name: create systemd service
+  blockinfile:
+    path: /usr/lib/systemd/system/alertmanager.service
+    block: |
+      [Unit]
+      Description=alertmanager
+      After=network.target
+
+      [Service]
+      ExecStart={{ alertmanager_path }}/alertmanager \
+        --config.file={{ alertmanager_path }}/alertmanager.yml
+
+      [Install]
+      WantedBy=multi-user.target
+    create: true
+
+- name: check service status
+  systemd:
+    name: alertmanager.service
+    state: started
+    enabled: true

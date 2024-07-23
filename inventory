@@ -1,0 +1,10 @@
+[prom]
+prometheus ansible_ssh_host=192.168.88.5
+
+[web]
+web1 ansible_ssh_host=192.168.88.100
+web2 ansible_ssh_host=192.168.88.200
+
+[all:vars]
+ansible_ssh_user=root
+ansible_ssh_pass=a

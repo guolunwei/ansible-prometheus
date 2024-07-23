@@ -1,0 +1,4 @@
+---
+# defaults file for prometheus/roles/node_exporter
+node_exporter_tar: "node_exporter-1.5.0.linux-amd64.tar.gz"
+node_exporter_path: "/usr/local/node_exporter"

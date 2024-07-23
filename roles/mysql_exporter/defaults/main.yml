@@ -1,0 +1,9 @@
+---
+# defaults file for roles/mysql_exporter
+mysqld_exporter_tar: "mysqld_exporter-0.14.0.linux-amd64.tar.gz"
+mysqld_exporter_path: "/usr/local/mysqld_exporter"
+
+mysql_host: "127.0.0.1"
+mysql_port: 3306
+mysql_user: "dbuser1"
+mysql_password: "123456"

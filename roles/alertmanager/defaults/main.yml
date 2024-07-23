@@ -1,0 +1,4 @@
+---
+# defaults file for roles/alertmanager
+alertmanager_tar: "alertmanager-0.25.0.linux-amd64.tar.gz"
+alertmanager_path: "/usr/local/alertmanager"

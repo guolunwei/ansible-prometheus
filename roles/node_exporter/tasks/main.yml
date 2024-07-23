@@ -1,0 +1,34 @@
+---
+# tasks file for node_exporter/roles/node_exporter
+- name: create directory
+  file:
+    path: "{{ node_exporter_path }}"
+    state: directory
+
+- name: decompress tarball
+  unarchive:
+    src: "{{ node_exporter_tar }}"
+    dest: "{{ node_exporter_path }}"
+    extra_opts:
+      - '--strip-components=1'
+
+- name: create systemd service
+  blockinfile:
+    path: /usr/lib/systemd/system/node_exporter.service
+    block: |
+      [Unit]
+      Description=node_exporter
+      After=network.target
+
+      [Service]
+      ExecStart={{ node_exporter_path }}/node_exporter
+
+      [Install]
+      WantedBy=multi-user.target
+    create: true
+
+- name: check service status
+  systemd:
+    name: node_exporter.service
+    state: started
+    enabled: true

@@ -1,0 +1,11 @@
+---
+- name: setup prometheus master
+  hosts: prom
+  gather_facts: no
+  become: yes
+  roles:
+    - common
+    - prometheus
+    - node_exporter
+    - alertmanager
+    - grafana
