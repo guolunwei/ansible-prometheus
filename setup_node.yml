@@ -4,5 +4,4 @@
   gather_facts: no
   become: yes
   roles:
-    - common
     - node_exporter
